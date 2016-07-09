@@ -123,7 +123,7 @@ public:
         b->TransferWaves(9);
 
         frame tempf;
-        tempf.timestamp = getNow();
+        tempf.timestamp = getNow()*1e-6;
 
         float tbuf[1024];
         float vbuf[1024];
