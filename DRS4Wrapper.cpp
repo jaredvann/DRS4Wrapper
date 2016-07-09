@@ -108,6 +108,7 @@ public:
     void SetFrequency(float x)      { b->SetFrequency(x, true); }
     void SetTriggerChannel(int x)   { b->SetTriggerSource(1 << (x-1)); }
     void SetTriggerPolarity(bool x) { b->SetTriggerPolarity(1 << (x-1)); }
+    void SetTriggerLevel(float x) { b->SetTriggerLevel(x); }
 
     float GetFrequency() { return b->GetTrueFrequency(); }
 
@@ -146,7 +147,7 @@ public:
 
     frame record2() {
         if (record() == 1)
-            return getLastFrame();
+            return framebuffer.back();
         else
             return frame();
     }
@@ -179,6 +180,19 @@ public:
                 max = i;
 
         return max;
+    }
+
+
+    float measureNPeak(int c=1) {
+        vector<float> y = framebuffer.back().channels[c-1].vals;
+
+        float min = y[0];
+
+        for (auto i : y)
+            if (i < min)
+                min = i;
+
+        return min;
     }
 
 
@@ -644,6 +658,7 @@ BOOST_PYTHON_MODULE(DRS4Wrapper) {
         .def("SetFrequency", &DRS4Wrapper::SetFrequency)
         .def("SetTriggerChannel", &DRS4Wrapper::SetTriggerChannel)
         .def("SetTriggerPolarity", &DRS4Wrapper::SetTriggerPolarity)
+        .def("SetTriggerLevel", &DRS4Wrapper::SetTriggerLevel)
 
         .def("GetFrequency", &DRS4Wrapper::GetFrequency)
 
@@ -654,6 +669,7 @@ BOOST_PYTHON_MODULE(DRS4Wrapper) {
 
         .def("measureLevel", &DRS4Wrapper::measureLevel)
         .def("measurePeak", &DRS4Wrapper::measurePeak)
+        .def("measureNPeak", &DRS4Wrapper::measureNPeak)
         .def("measurePeakPeak", &DRS4Wrapper::measurePeakPeak)
         .def("measureRMS", &DRS4Wrapper::measureRMS)
         .def("measureCharge", &DRS4Wrapper::measureCharge)

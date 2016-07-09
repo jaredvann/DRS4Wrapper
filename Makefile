@@ -18,7 +18,7 @@ CPP_OBJ       = drs.o averager.o
 OBJECTS       = musbstd.o mxml.o strlcpy.o
 
 
-all: $(OBJECTS) $(CPP_OBJ) DRS4Wrapper DRS4Wrapper.so
+all: $(OBJECTS) $(CPP_OBJ) DRS4Wrapper.so
 
 
 $(CPP_OBJ): %.o: drs/%.cpp
@@ -26,10 +26,6 @@ $(CPP_OBJ): %.o: drs/%.cpp
 
 $(OBJECTS): %.o: drs/%.c
 	$(CC) $(CFLAGS) -c $<
-
-
-DRS4Wrapper: DRS4Wrapper.o
-	$(CXX) $(CFLAGS) $(CXXFLAGS) $(OBJECTS) $(CPP_OBJ) DRS4Wrapper.o -o DRS4Wrapper 
 
 DRS4Wrapper.so: DRS4Wrapper.o
 	$(CXX) $(CFLAGS) $(CXXFLAGS) $(OBJECTS) $(CPP_OBJ) DRS4Wrapper.o -o DRS4Wrapper.so -shared
